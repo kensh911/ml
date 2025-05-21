@@ -1,0 +1,21 @@
+# Byte-compiled / optimized Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Виртуальное окружение
+venv/
+env/
+ENV/
+
+# Файлы базы данных
+*.db
+*.sqlite3
+
+# Локальные конфигурационные файлы
+.env
+
+# Кэш и временные файлы
+.DS_Store
+.idea/
+.vscode/

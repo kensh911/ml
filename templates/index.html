@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Извлечение товаров с мебельных сайтов</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Extraction Pro</h1>
+            <p>Инструмент для извлечения товаров с сайтов мебельных магазинов</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="search-section">
+            <div class="card">
+                <h2>Введите URL мебельного магазина</h2>
+                <form id="extract-form">
+                    <div class="input-group">
+                        <input type="text" id="url-input" placeholder="Например: mebelshop.ru/catalog" required>
+                        <button type="submit" id="submit-btn">Извлечь товары</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <div class="results-container">
+            <section class="results-section">
+                <div class="card">
+                    <h2>Найденные товары</h2>
+                    <div id="loading" class="loading hidden">
+                        <div class="spinner"></div>
+                        <p>Анализируем страницу...</p>
+                    </div>
+                    <div id="results">
+                        <p class="initial-message">Введите URL выше, чтобы увидеть список товаров</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="stats-section">
+                <div class="card">
+                    <h2>Топ товаров</h2>
+                    <div id="stats">
+                        {% if stats %}
+                            <ul class="stats-list">
+                                {% for item in stats %}
+                                <li>
+                                    <span class="product-name">{{ item.name }}</span>
+                                    <span class="product-count">{{ item.count }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>Статистика появится после анализа первых URL</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>Недавние запросы</h2>
+                    <div id="recent">
+                        {% if recent_urls %}
+                            <ul class="recent-list">
+                                {% for url in recent_urls %}
+                                <li class="recent-item {{ 'success' if url.status == 'success' else 'error' }}">
+                                    <a href="#" class="url-link" data-url="{{ url.url }}">{{ url.url }}</a>
+                                    <span class="url-count">{{ url.count }} товаров</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>История запросов появится здесь</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <section class="metrics-section">
+            <div class="card">
+                <h2>Метрики качества</h2>
+                <div id="metrics">
+                    <p>Для оценки качества модели выполните следующие шаги:</p>
+                    <ol>                    
+                        <li>Создайте тестовый набор данных</li>
+                        <li>Запустите оценку модели</li>
+                    </ol>
+                    <div class="button-group">
+                        <button id="create-test-set-btn" class="secondary-btn">Создать тестовый набор</button>
+                        <button id="evaluate-model-btn" class="secondary-btn">Оценить модель</button>
+                    </div>
+                    <div id="metrics-result" class="hidden">
+                        <h3>Результаты оценки</h3>
+                        <div class="metrics-cards">
+                            <div class="metric-card">
+                                <h4>Precision</h4>
+                                <div class="metric-value" id="precision-value">-</div>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Recall</h4>
+                                <div class="metric-value" id="recall-value">-</div>
+                            </div>
+                            <div class="metric-card">
+                                <h4>F1-Score</h4>
+                                <div class="metric-value" id="f1-value">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Пакетная обработка</h2>
+                <p>Запустите обработку нескольких URL из файла URL_list.csv</p>
+                <div class="input-group">
+                    <input type="number" id="batch-size" placeholder="Размер пакета" value="50" min="1" max="704">
+                    <input type="number" id="start-index" placeholder="Начальный индекс" value="0" min="0" max="703">
+                    <button id="run-batch-btn" class="secondary-btn">Запустить обработку</button>
+                </div>
+                <div id="batch-status" class="hidden">
+                    <p>Пакетная обработка запущена...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>Extraction Pro - Инструмент для анализа мебельных сайтов</p>
+        </div>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
